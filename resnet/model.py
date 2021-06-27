@@ -1,4 +1,4 @@
-from .components.layer import ResLayer
+from .components import ResLayer
 
 from tensorflow.keras.models import Model
 from tensorflow.keras import Sequential

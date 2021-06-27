@@ -5,7 +5,7 @@ from tensorflow.keras import Sequential
 
 class BasicBlock(Layer):
     def __init__(self, filter_num, stride=1):
-        self.block = Sequential([
+        self.net = Sequential([
             Conv2D(filters=filter_num,
                    kernel_size=(3, 3),
                    strides=stride,
@@ -14,18 +14,18 @@ class BasicBlock(Layer):
             ReLU(),
             Conv2D(filters=filter_num,
                    kernel_size=(3, 3),
-                   strides=stride,
+                   strides=1,
                    padding='same'),
             BatchNormalization(),
         ])
 
-    def call(self, inputs):
-        return self.block(inputs)
+    def call(self, inputs, *args, **kwargs):
+        return self.net(inputs, *args, **kwargs)
 
 
 class BottleNeckBlock(Layer):
-    def __init__(self, filter_num, stride=1, is_downsample=False):
-        self.block = Sequential([
+    def __init__(self, filter_num, stride=1):
+        self.net = Sequential([
             Conv2D(filters=filter_num,
                    kernel_size=(1, 1),
                    strides=1,
@@ -45,20 +45,20 @@ class BottleNeckBlock(Layer):
             BatchNormalization(),
         ])
 
-    def call(self, inputs):
-        return self.block(inputs)
+    def call(self, inputs, *args, **kwargs):
+        return self.net(inputs, *args, **kwargs)
 
 
-class BuildBlock(Layer):
-    def __init__(self, filter_num, stride=1, is_downsample=False, is_bottleneck=False):
-        if is_bottleneck:
-            self.block = BottleNeckBlock(filter_num, stride, is_downsample)
+class BuildingBlock(Layer):
+    def __init__(self, filter_num, stride=1, use_downsample=False, use_bottleneck=False):
+        if use_bottleneck:
+            self.net = BottleNeckBlock(filter_num, stride)
             self.expansion = 4
         else:
-            self.block = BasicBlock(filter_num, stride, is_downsample)
+            self.net = BasicBlock(filter_num, stride)
             self.expansion = 1
 
-        if is_downsample:
+        if use_downsample:
             self.downsample = Sequential([
                 Conv2D(filters=filter_num * self.expansion,
                        kernel_size=(1, 1),
@@ -70,13 +70,13 @@ class BuildBlock(Layer):
 
         self.add = Sequential([
             Add(),
-            ReLU(),
+            ReLU()
         ])
 
-    def call(self, inputs):
-        x = self.block(inputs)
+    def call(self, inputs, *args, **kwargs):
+        x = self.net(inputs, *args, **kwargs)
 
         if self.downsample != None:
-            inputs = self.downsample(inputs)
+            inputs = self.downsample(inputs, *args, **kwargs)
 
-        return self.add([inputs, x])
+        return self.add([inputs, x], *args, **kwargs)

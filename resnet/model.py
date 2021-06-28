@@ -7,19 +7,20 @@ from tensorflow.keras.layers import Conv2D, BatchNormalization, ReLU, MaxPool2D,
 
 class ResNet(Model):
     def __init__(self, layers, num_classes=1000, use_bottleneck=False):
+        super(ResNet, self).__init__()
 
         assert len(
             layers) == 4, "layers should be a 4-element list, got {}".format(layers)
 
         # The model start with a 7x7 convolutions and a MaxPool2D
         self.net = Sequential([
-            Conv2D(filters=2,
+            Conv2D(filters=64,
                    kernel_size=(7, 7),
                    strides=2,
                    padding='same'),
             BatchNormalization(),
             ReLU(),
-            MaxPool2D(pool_size=(3, 3), strides=2),
+            MaxPool2D(pool_size=(3, 3), strides=2)
         ])
 
         # Add 4 layers to the network

@@ -17,6 +17,7 @@ class ResLayer(Layer):
         use_downsample: type of shortcut connection: Identity or Projection shortcut
         use_bottleneck: type of block: basic or bottleneck
         """
+        super(ResLayer, self).__init__()
 
         self.net = Sequential()
         if use_downsample:

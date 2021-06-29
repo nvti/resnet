@@ -2,7 +2,7 @@ from .components import ResLayer
 
 from tensorflow.keras.models import Model
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, BatchNormalization, ReLU, MaxPool2D, AvgPool2D, Dense
+from tensorflow.keras.layers import Conv2D, BatchNormalization, ReLU, MaxPool2D, GlobalAveragePooling2D, Dense
 
 
 class ResNet(Model):
@@ -35,7 +35,7 @@ class ResNet(Model):
 
         # classification network
         self.classifier = Sequential([
-            AvgPool2D(pool_size=(1, 1)),
+            GlobalAveragePooling2D(),
             Dense(num_classes, activation='softmax')
         ])
 

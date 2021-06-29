@@ -1,39 +1,44 @@
 from resnet.components.block import *
-from tensorflow.keras import Sequential
+from utils import assert_output_shape
+import tensorflow as tf
 
 
 def test_basic_block():
-    model = Sequential([BasicBlock(filter_num=64, stride=1)])
-    model.build(input_shape=(None, 28, 28, 1))
+    # test basic block with stride=1 (same image size)
+    assert_output_shape(block=BasicBlock(filter_num=64, stride=1),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 28, 28, 64))  # output channel = filter_num
 
-    # output channel = filter_num
-    assert model.output_shape == (None, 28, 28, 64)
-
-    model = Sequential([BasicBlock(filter_num=64, stride=2)])
-    model.build(input_shape=(None, 28, 28, 1))
-    # output size /= 2
-    assert model.output_shape == (None, 14, 14, 64)
+    # test basic block with stride=2 (down sampling)
+    assert_output_shape(block=BasicBlock(filter_num=64, stride=2),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 14, 14, 64))
 
 
 def test_bottleneck_block():
-    model = Sequential([BottleNeckBlock(filter_num=64, stride=1)])
-    model.build(input_shape=(None, 28, 28, 1))
-    # output channel = filter_num * 4
-    assert model.output_shape == (None, 28, 28, 256)
+    # test bottleneck block with stride=1 (same image size)
+    assert_output_shape(block=BottleNeckBlock(filter_num=64, stride=1),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 28, 28, 256))  # output channel = filter_num * 4
 
-    model = Sequential([BottleNeckBlock(filter_num=64, stride=2)])
-    model.build(input_shape=(None, 28, 28, 1))
-    # output size /= 2
-    assert model.output_shape == (None, 14, 14, 256)
+    # test bottleneck block with stride=2 (down sampling)
+    assert_output_shape(block=BottleNeckBlock(filter_num=64, stride=2),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 14, 14, 256))
 
 
 def test_building_block():
-    model = Sequential([BuildingBlock(filter_num=64, stride=2,
-                                      use_downsample=True, use_bottleneck=False)])
-    model.build(input_shape=(None, 28, 28, 1))
-    assert model.output_shape == (None, 14, 14, 64)
 
-    model = Sequential([BuildingBlock(filter_num=64, stride=2,
-                                      use_downsample=True, use_bottleneck=True)])
-    model.build(input_shape=(None, 28, 28, 1))
-    assert model.output_shape == (None, 14, 14, 256)
+    # test basic block with down sampling (use projection shortcut)
+    assert_output_shape(block=BuildingBlock(filter_num=64, stride=2,
+                                            use_downsample=True,
+                                            use_bottleneck=False),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 14, 14, 64))
+
+    # test bottleneck block with down sampling (use projection shortcut)
+    assert_output_shape(block=BuildingBlock(filter_num=64, stride=2,
+                                            use_downsample=True,
+                                            use_bottleneck=True),
+                        input_shape=(1, 28, 28, 1),
+                        output_shape=(1, 14, 14, 256))

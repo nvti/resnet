@@ -7,11 +7,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from tensorflow.python.data import Dataset
 import numpy as np
-import os
 
 if __name__ == '__main__':
-    home_dir = os.getcwd()
-
     parser = ArgumentParser()
     parser.add_argument('--model', default='resnet34', type=str,
                         help='Type of ResNet model, valid option: resnet18, resnet34, resnet50, resnet101, resnet152')
@@ -31,7 +28,7 @@ if __name__ == '__main__':
                         help='Where training data is located')
     parser.add_argument('--valid-folder', default='', type=str,
                         help='Where validation data is located')
-    parser.add_argument('--model-folder', default='{}/output/'.format(home_dir),
+    parser.add_argument('--model-folder', default='.output/',
                         type=str, help='Folder to save trained model')
 
     args = parser.parse_args()

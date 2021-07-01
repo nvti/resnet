@@ -1,6 +1,5 @@
-from resnet.components.block import *
+from resnet.components.block import BasicBlock, BottleNeckBlock, BuildingBlock
 from tests.utils import assert_output_shape
-import tensorflow as tf
 
 
 def test_basic_block():

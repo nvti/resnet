@@ -1,6 +1,5 @@
-from resnet.components.layer import *
+from resnet.components.layer import ResLayer
 from tests.utils import assert_output_shape
-from tensorflow.keras import Sequential
 
 
 def test_layer_basic():

@@ -1,4 +1,4 @@
-from resnet import *
+from resnet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 from argparse import ArgumentParser
 from tensorflow.keras.datasets import fashion_mnist
@@ -6,7 +6,6 @@ from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from tensorflow.python.data import Dataset
-import tensorflow
 import numpy as np
 import os
 

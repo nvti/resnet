@@ -114,7 +114,7 @@ class BuildingBlock(Layer):
         x = self.net(inputs, *args, **kwargs)
 
         # use downsample if need
-        if self.downsample != None:
+        if self.downsample is not None:
             inputs = self.downsample(inputs, *args, **kwargs)
 
         # add the input with output of the network

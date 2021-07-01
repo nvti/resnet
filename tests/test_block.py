@@ -1,5 +1,5 @@
 from resnet.components.block import *
-from utils import assert_output_shape
+from tests.utils import assert_output_shape
 import tensorflow as tf
 
 
